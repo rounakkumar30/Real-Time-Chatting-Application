@@ -1,0 +1,78 @@
+{% extends 'layouts/box.html' %}
+
+{% block content %}
+
+<!-- Full Page Background -->
+<div class="bg-gradient-to-r from-blue-50 to-blue-100 min-h-screen flex justify-center items-center py-10 px-4">
+
+    <!-- Settings Container -->
+    <div class="max-w-2xl w-full bg-white shadow-xl rounded-2xl border border-gray-300 p-8 transition duration-300 hover:shadow-2xl">
+
+        <!-- Heading -->
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">⚙️ Account Settings</h1>
+
+        <table class="w-full text-sm text-left text-gray-600">
+            <tbody>
+
+                <!-- Email Address -->
+                <tr class="border-b hover:bg-gray-100 transition">
+                    <th class="py-4 px-4 text-lg font-semibold text-gray-900 flex items-center">
+                        📧 Email Address
+                    </th>
+                    <td id="email-address" class="py-4 px-4 text-gray-700">
+                        {{ user.email|default:"No Email" }}
+                    </td>
+                    <td class="py-4 px-4 text-right">
+                        <a id="email-edit" class="cursor-pointer font-medium text-blue-600 hover:text-blue-800 transition"
+                            hx-get="{% url 'profile-emailchange' %}"
+                            hx-target="#email-address"
+                            hx-swap="innerHTML">
+                            ✏️ Edit
+                        </a>
+                    </td>
+                </tr>
+
+                <!-- Email Verification -->
+                <tr class="border-b hover:bg-gray-100 transition">
+                    <th class="py-4 px-4 text-lg font-semibold text-gray-900 flex items-center">
+                        ✔️ Verification Status
+                    </th>
+                    <td class="py-4 px-4">
+                        {% if user.emailaddress_set.first.verified %}
+                            <span class="bg-green-100 text-green-700 font-bold px-3 py-1 rounded-lg">✅ Verified</span>
+                        {% else %}
+                            <span class="bg-yellow-100 text-yellow-700 font-bold px-3 py-1 rounded-lg">⚠️ Not Verified</span>
+                        {% endif %}
+                    </td>
+                    <td class="py-4 px-4 text-right">
+                        {% if not user.emailaddress_set.first.verified %}
+                            <a href="{% url 'profile-emailverify' %}" class="font-medium text-blue-600 hover:text-blue-800 transition">
+                                🔄 Verify
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <!-- Delete Account -->
+                <tr class="hover:bg-red-100 transition">
+                    <th class="py-4 px-4 text-lg font-semibold text-red-600 flex items-center">
+                        ❌ Delete Account
+                    </th>
+                    <td class="py-4 px-4 text-red-600">
+                        <span class="font-medium">⚠️ This action is permanent.</span>
+                    </td>
+                    <td class="py-4 px-4 text-right">
+                        <a href="{% url 'profile-delete' %}" class="font-medium text-red-600 hover:text-red-800 transition">
+                            🗑️ Delete
+                        </a>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

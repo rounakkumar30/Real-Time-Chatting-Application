@@ -1,0 +1,76 @@
+{% extends 'layouts/blank.html' %}
+
+{% block content %}
+
+<div class="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-400 to-purple-500 px-4">
+    <div class="bg-white bg-opacity-20 backdrop-blur-lg shadow-xl rounded-2xl border border-gray-300 p-8 w-full max-w-md text-center">
+        
+        <!-- Profile Avatar -->
+        <div class="relative">
+            <img class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md mx-auto" src="{{ profile.avatar }}" />
+            <div class="absolute bottom-2 right-2 bg-green-400 w-6 h-6 rounded-full border-2 border-white"></div>
+        </div>
+
+        <!-- Name & Username -->
+        <h1 class="text-3xl font-extrabold text-white mt-4">{{ profile.name }}</h1>
+        <div class="text-gray-200 text-sm">@{{ profile.user.username }}</div>
+
+        <!-- Email -->
+        <div class="mt-4 text-white text-lg font-medium">
+            📧 <strong>Email:</strong> {{ profile.user.email }}
+        </div>
+
+        <!-- Email Verification Status -->
+        <div class="mt-2 text-lg font-medium">
+            ✅ <strong>Email Verified:</strong> 
+            {% if profile.user.emailaddress_set.first.verified %}
+                <span class="text-green-300 font-semibold">Yes</span>
+            {% else %}
+                <span class="text-red-400 font-semibold">No</span>
+            {% endif %}
+        </div>
+
+        <!-- Account Details -->
+        <div class="mt-4 text-white text-lg font-medium">
+            📅 <strong>Joined:</strong> {{ profile.user.date_joined|date:"F d, Y" }}
+        </div>
+        <div class="mt-2 text-white text-lg font-medium">
+            ⏳ <strong>Last Active:</strong> {{ profile.user.last_login|date:"F d, Y, h:i A" }}
+        </div>
+
+        <!-- Bio/Info -->
+        {% if profile.info %}
+        <div class="mt-6 p-4 bg-white bg-opacity-30 rounded-lg text-white text-md">
+            {{ profile.info|linebreaksbr }}
+        </div>
+        {% endif %}  
+
+        <!-- Social Links (If Available) -->
+        {% if profile.twitter or profile.linkedin or profile.github %}
+        <div class="mt-6">
+            <strong class="text-white text-lg">🔗 Social Links:</strong>
+            <div class="flex justify-center space-x-4 mt-3">
+                {% if profile.twitter %}
+                <a href="{{ profile.twitter }}" target="_blank" class="text-blue-300 hover:text-blue-500 transition duration-300">Twitter</a>
+                {% endif %}
+                {% if profile.linkedin %}
+                <a href="{{ profile.linkedin }}" target="_blank" class="text-blue-400 hover:text-blue-600 transition duration-300">LinkedIn</a>
+                {% endif %}
+                {% if profile.github %}
+                <a href="{{ profile.github }}" target="_blank" class="text-gray-300 hover:text-gray-500 transition duration-300">GitHub</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Chat Button (Only if Viewing Other Profiles) -->
+        {% if profile.user != user %}
+        <a class="mt-6 inline-block bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-full shadow-lg hover:scale-105 transition transform duration-300" 
+           href="{% url 'start-chat' profile.user.username %}">
+            💬 Chat with Me
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

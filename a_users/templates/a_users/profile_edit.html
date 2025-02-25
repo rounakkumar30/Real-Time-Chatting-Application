@@ -1,0 +1,81 @@
+{% extends 'layouts/box.html' %}
+
+{% block content %}
+
+<!-- Background with subtle gradient -->
+<div class="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-100 to-purple-200 px-6 py-10">
+    <div class="bg-white shadow-lg rounded-xl border border-gray-300 p-8 w-full max-w-lg text-center transition duration-300 hover:shadow-xl">
+
+        <!-- Heading -->
+        <h1 class="text-2xl font-extrabold text-gray-800 mb-6">
+            {% if onboarding %} 🚀 Complete Your Profile {% else %} ✏️ Edit Your Profile {% endif %}
+        </h1>
+
+        <!-- Profile Avatar -->
+        <div class="relative inline-block">
+            <img id="avatar" class="w-32 h-32 rounded-full object-cover border-4 border-gray-300 shadow-md mx-auto transition-transform duration-300 hover:scale-105" src="{{ user.profile.avatar }}" />
+            <div class="absolute bottom-2 right-2 bg-green-500 w-6 h-6 rounded-full border-2 border-white"></div>
+        </div>
+
+        <!-- User Info -->
+        <div class="mt-4">
+            <h1 id="displayname" class="text-xl font-semibold text-black">{{ user.profile.displayname|default:"Your Name" }}</h1>
+            <div class="text-black text-sm">@{{ user.username }}</div>
+        </div>
+
+        <!-- Form Section -->
+        <form method="POST" enctype="multipart/form-data" class="mt-6 space-y-4">
+            {% csrf_token %}
+
+            <!-- Form Fields with Styling -->
+            <div class="space-y-4 text-left">
+                {% for field in form %}
+                    <div>
+                        <label class="block font-semibold text-gray-700">{{ field.label }}</label>
+                        <!-- Changed text color for form fields -->
+                        <div class="text-black">{{ field }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Buttons Section -->
+            <div class="flex flex-col sm:flex-row justify-center mt-6 space-y-3 sm:space-y-0 sm:space-x-4">
+                <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition">
+                    ✅ Submit
+                </button>
+
+                {% if onboarding %}
+                <a href="{% url 'home' %}" class="bg-gray-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-gray-600 transition">
+                    ⏭️ Skip
+                </a>
+                {% else %}
+                <a href="{{ request.META.HTTP_REFERER }}" class="bg-gray-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-gray-600 transition">
+                    ❌ Cancel
+                </a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Update avatar preview
+    const fileInput = document.querySelector('input[type="file"]');
+    fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        const image = document.querySelector('#avatar');
+        if (file && file.type.includes('image')) {
+            const url = URL.createObjectURL(file);
+            image.src = url;
+        }
+    });
+
+    // Update display name dynamically
+    const displayNameInput = document.getElementById('id_displayname');
+    const displayNameOutput = document.getElementById('displayname');
+    displayNameInput.addEventListener('input', (event) => {
+        displayNameOutput.innerText = event.target.value;
+    });
+</script>
+
+{% endblock %}

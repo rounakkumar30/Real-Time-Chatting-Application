@@ -1,0 +1,132 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n %}
+{% load allauth account %}
+
+{% block head_title %}
+    {% trans "Sign In" %}
+{% endblock head_title %}
+
+{% block content %}
+
+<!-- Full-Screen Background with Animated Gradient -->
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 via-blue-500 to-indigo-700 p-6 animate-gradient">
+
+    <!-- Glassmorphism Card with Reduced Blur -->
+    <div class="w-full max-w-md bg-white/5 backdrop-blur-md shadow-lg rounded-2xl border border-white/10 p-8 animate-fadeIn scale-95 hover:scale-100 transition-transform duration-300">
+
+        <!-- Title -->
+        <h1 class="text-4xl font-extrabold text-white text-center mb-4 tracking-wider">
+            {% trans "Sign In" %}
+        </h1>
+
+        <!-- Sign Up Link -->
+        <p class="text-gray-300 text-center mb-6">
+            New here? 
+            <a href="{% url 'account_signup' %}?next={% url 'profile-onboarding' %}" 
+               class="text-yellow-400 font-semibold hover:text-yellow-300 transition-all duration-200 hover:shadow-glow">
+               Create an Account
+            </a>
+        </p>
+
+        <!-- Login Form -->
+        <form method="post" action="{% url 'account_login' %}" class="space-y-5">
+            {% csrf_token %}
+            
+            <!-- Input Fields with Icons -->
+            <div class="space-y-4">
+                {% for field in form %}
+                    {% if field.field.widget.input_type != "checkbox" %}  
+                        <div class="relative group">
+                            <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg transition-all group-hover:text-white">
+                                {% if field.name == "login" %}📧{% endif %}
+                                {% if field.name == "password" %}🔒{% endif %}
+                            </span>
+                            {{ field }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Animated Inputs -->
+            <style>
+                input {
+                    width: 100%;
+                    padding: 12px 12px 12px 40px;
+                    border-radius: 8px;
+                    border: 1px solid rgba(255, 255, 255, 0.3);
+                    background: rgba(255, 255, 255, 0.05); /* Reduced blur effect */
+                    color: white;
+                    outline: none;
+                    transition: all 0.3s ease-in-out;
+                    box-shadow: 0px 0px 8px rgba(255, 255, 255, 0.1);
+                }
+
+                input:focus {
+                    border-color: white;
+                    background: rgba(255, 255, 255, 0.15);
+                    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+                }
+
+                /* Smooth Gradient Animation */
+                @keyframes gradientAnimation {
+                    0% { background-position: 0% 50%; }
+                    50% { background-position: 100% 50%; }
+                    100% { background-position: 0% 50%; }
+                }
+                
+                .animate-gradient {
+                    background-size: 200% 200%;
+                    animation: gradientAnimation 6s ease infinite;
+                }
+
+                /* Fade In Animation */
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: scale(0.95); }
+                    to { opacity: 1; transform: scale(1); }
+                }
+                
+                .animate-fadeIn {
+                    animation: fadeIn 0.6s ease-out;
+                }
+
+                /* Glowing Hover Effect */
+                .hover\:shadow-glow:hover {
+                    box-shadow: 0px 0px 12px rgba(255, 255, 255, 0.4);
+                }
+
+                /* Button Hover Animation */
+                .btn-hover:hover {
+                    transform: translateY(-3px);
+                    transition: transform 0.2s ease-in-out;
+                }
+            </style>
+
+            <!-- 🚀 Sign-In Button -->
+            <button type="submit" 
+                    class="w-full bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 font-bold py-3 rounded-lg hover:shadow-glow btn-hover transition-all duration-300">
+                🚀 {% trans "Sign In" %}
+            </button>
+        </form>
+
+        <!-- Social Login -->
+        {% if SOCIALACCOUNT_ENABLED %}
+            <div class="mt-6 text-center animate-fadeIn">
+                <p class="text-gray-300 mb-2">Or sign in with</p>
+                {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+            </div>
+        {% endif %}
+
+        <!-- Forgot Password Link -->
+        <div class="mt-4 text-center">
+            <a href="{% url 'account_reset_password' %}" 
+               class="text-gray-300 hover:text-white transition-all duration-200 relative inline-block">
+                Forgot Password?
+                <span class="absolute w-0 h-1 bg-yellow-400 bottom-0 left-0 transition-all duration-300 hover:w-full"></span>
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock content %}
