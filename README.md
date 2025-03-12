@@ -1,6 +1,4 @@
 
-
-```markdown
 # 💬 Django Real-Time Chat Application  
 
 ## 📌 Project Overview  
@@ -33,9 +31,9 @@ A **real-time chat application** built with **Django, WebSockets, and Channels**
 
 ### 1️⃣ Clone the Repository  
 ```bash
-git clone https://github.com/rounakkumar30/Real-Time-Chatting-Application.git 
+git clone https://github.com/rounakkumar30/Real-Time-Chatting-Application.git
 cd django-chat-app
-```
+
 
 ### 2️⃣ Create Virtual Environment  
 
