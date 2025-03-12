@@ -1,6 +1,4 @@
-Here's your **GitHub-ready `README.md`** for the **Real-Time Chat Application using Django** with proper formatting:  
 
----
 
 ```markdown
 # 💬 Django Real-Time Chat Application  
